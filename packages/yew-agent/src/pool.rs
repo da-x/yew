@@ -30,7 +30,8 @@ pub(crate) fn locate_callback_and_respond<AGN: Agent>(
     };
     match callback {
         Some(callback) => callback.emit(output),
-        None => console::warn!(format!("The Id of the handler: {}, while present in the slab, is not associated with a callback.", id.raw_id())),
+        None => {
+        },
     }
 }
 
