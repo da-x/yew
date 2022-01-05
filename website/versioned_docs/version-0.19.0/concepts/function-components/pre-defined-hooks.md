@@ -24,7 +24,7 @@ re-render when the state changes.
 ### Example
 
 ```rust
-use yew::{Callback, function_component, html, use_state};
+use yew::{Callback, function_component, html, use_state, Html};
 
 #[function_component(UseState)]
 fn state() -> Html {
@@ -77,7 +77,7 @@ If you need the component to be re-rendered on state change, consider using [`us
 ```rust
 // EventBus is an implementation of yew_agent::Agent
 use website_test::agents::EventBus;
-use yew::{function_component, html, use_ref, use_state, Callback};
+use yew::{function_component, html, use_ref, use_state, Callback, Html};
 use yew_agent::Bridged;
 
 #[function_component(UseRef)]
@@ -114,6 +114,7 @@ use yew::{
     events::Event,
     function_component, html, use_mut_ref, use_state,
     Callback, TargetCast,
+    Html,
 };
 
 #[function_component(UseMutRef)]
@@ -162,7 +163,7 @@ DOM.
 use web_sys::HtmlInputElement;
 use yew::{
     function_component, functional::*, html,
-    NodeRef
+    NodeRef, Html
 };
 
 #[function_component(UseRef)]
@@ -306,7 +307,7 @@ The destructor can be used to clean up the effects introduced and it can take ow
 ### Example
 
 ```rust
-use yew::{Callback, function_component, html, use_effect, use_state};
+use yew::{Callback, function_component, html, use_effect, use_state, Html};
 
 #[function_component(UseEffect)]
 fn effect() -> Html {
@@ -358,7 +359,7 @@ use_effect_with_deps(
 ### Example
 
 ```rust
-use yew::{ContextProvider, function_component, html, use_context, use_state};
+use yew::{ContextProvider, function_component, html, use_context, use_state, Html};
 
 
 /// App theme

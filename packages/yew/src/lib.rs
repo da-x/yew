@@ -160,7 +160,6 @@ pub use yew_macro::html;
 /// impl Into<Html> for ListItem {
 ///   fn into(self) -> Html { html! { <self /> } }
 /// }
-///
 /// // You can use `List` with nested `ListItem` components.
 /// // Using any other kind of element would result in a compile error.
 /// # fn test() -> Html {
@@ -262,6 +261,8 @@ pub mod context;
 pub mod functional;
 pub mod html;
 pub mod scheduler;
+mod sealed;
+pub mod suspense;
 pub mod utils;
 pub mod virtual_dom;
 
@@ -280,6 +281,8 @@ pub mod events {
 
 pub use crate::app_handle::AppHandle;
 use web_sys::Element;
+
+use crate::html::BaseComponent;
 
 thread_local! {
     static PANIC_HOOK_IS_SET: Cell<bool> = Cell::new(false);
@@ -303,7 +306,7 @@ fn set_default_panic_hook() {
 /// If you would like to pass props, use the `start_app_with_props_in_element` method.
 pub fn start_app_in_element<COMP>(element: Element) -> AppHandle<COMP>
 where
-    COMP: Component,
+    COMP: BaseComponent,
     COMP::Properties: Default,
 {
     start_app_with_props_in_element(element, COMP::Properties::default())
@@ -313,7 +316,7 @@ where
 /// Alias to start_app_in_element(Body)
 pub fn start_app<COMP>() -> AppHandle<COMP>
 where
-    COMP: Component,
+    COMP: BaseComponent,
     COMP::Properties: Default,
 {
     start_app_with_props(COMP::Properties::default())
@@ -326,7 +329,7 @@ where
 /// CSS classes of the body element.
 pub fn start_app_as_body<COMP>() -> AppHandle<COMP>
 where
-    COMP: Component,
+    COMP: BaseComponent,
     COMP::Properties: Default,
 {
     start_app_with_props_as_body(COMP::Properties::default())
@@ -339,7 +342,7 @@ pub fn start_app_with_props_in_element<COMP>(
     props: COMP::Properties,
 ) -> AppHandle<COMP>
 where
-    COMP: Component,
+    COMP: BaseComponent,
 {
     set_default_panic_hook();
     AppHandle::<COMP>::mount_with_props(element, Rc::new(props))
@@ -349,7 +352,7 @@ where
 /// This function does the same as `start_app(...)` but allows to start an Yew application with properties.
 pub fn start_app_with_props<COMP>(props: COMP::Properties) -> AppHandle<COMP>
 where
-    COMP: Component,
+    COMP: BaseComponent,
 {
     start_app_with_props_in_element(
         gloo_utils::document()
@@ -367,7 +370,7 @@ where
 /// CSS classes of the body element.
 pub fn start_app_with_props_as_body<COMP>(props: COMP::Properties) -> AppHandle<COMP>
 where
-    COMP: Component,
+    COMP: BaseComponent,
 {
     set_default_panic_hook();
     AppHandle::<COMP>::mount_as_body_with_props(Rc::new(props))
@@ -387,10 +390,11 @@ pub mod prelude {
     pub use crate::context::ContextProvider;
     pub use crate::events::*;
     pub use crate::html::{
-        create_portal, Children, ChildrenWithProps, Classes, Component, Context, Html, NodeRef,
-        Properties,
+        create_portal, BaseComponent, Children, ChildrenWithProps, Classes, Component, Context,
+        Html, HtmlResult, NodeRef, Properties,
     };
     pub use crate::macros::{classes, html, html_nested};
+    pub use crate::suspense::Suspense;
 
     pub use crate::functional::*;
 }
